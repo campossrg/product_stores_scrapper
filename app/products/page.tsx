@@ -1,6 +1,8 @@
 import { ProductTable } from '@/components/ProductTable';
 import { getProductsWithHistory } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProductsPage() {
   const products = await getProductsWithHistory();
 

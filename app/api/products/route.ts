@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getProductsWithHistory } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const products = await getProductsWithHistory();

@@ -3,6 +3,9 @@ import { scrapeWebsite, scrapeDemo } from '@/lib/scraper';
 import { upsertProduct, insertPriceHistory } from '@/lib/supabase';
 import { ScraperConfig } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
