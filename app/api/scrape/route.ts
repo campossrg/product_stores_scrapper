@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server';
 import { scrapeWebsite, scrapeDemo } from '@/lib/scraper';
 import { upsertProduct, insertPriceHistory } from '@/lib/supabase';
 import { ScraperConfig } from '@/lib/types';
+import { requireAdminApi } from '@/lib/auth-guard';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
   try {
     const body = await request.json();
     const { useDemo, config } = body;

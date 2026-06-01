@@ -55,7 +55,18 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-The service role key is needed for the scraper API to insert data without auth (since this is for personal use).
+The service role key is needed for the scraper API to insert data without auth.
+
+To protect admin-only scraping and scheduling features, also configure Google OAuth and the email allowlist:
+
+```
+AUTH_SECRET=generate_a_long_random_secret
+AUTH_GOOGLE_ID=your_google_oauth_client_id
+AUTH_GOOGLE_SECRET=your_google_oauth_client_secret
+ADMIN_EMAILS=you@example.com,teammate@example.com
+```
+
+Only emails listed in `ADMIN_EMAILS` can sign in to `/admin` and use the scrape/schedule APIs.
 
 ### 4. Run Development Server
 
@@ -68,10 +79,10 @@ Open [http://localhost:3000](http://localhost:3000)
 ## Usage
 
 ### Demo Scrape
-Click **"Run Demo Scrape"** on the dashboard to populate the database with sample vegetable data and see the dashboard in action.
+Sign in at `/admin` with an allowlisted Google account, then click **"Run Demo Scrape"** to populate the database with sample vegetable data and see the dashboard in action.
 
 ### Custom Website Scraping
-Click **"Custom Website"** to configure scraper settings:
+After signing in at `/admin`, click **"Custom Website"** to configure scraper settings:
 
 - **Website URL**: The page to scrape
 - **Store Name**: Identifier for the store
@@ -130,7 +141,9 @@ Configure:
 
 ## Scheduling Scrapes (Optional)
 
-For automatic price tracking, set up a cron job or use a service like GitHub Actions, Vercel Cron, or a simple serverless function to call the scrape API regularly:
+The admin schedule UI lives at `/admin` and is protected by Google OAuth plus the `ADMIN_EMAILS` allowlist.
+
+For automatic price tracking on Vercel, keep the weekly cron in `vercel.json` and call the protected cron endpoint server-to-server:
 
 ```bash
 curl -X POST http://your-app.com/api/scrape \

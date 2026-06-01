@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server';
 import { getScheduleById, updateSchedule, deleteSchedule } from '@/lib/supabase';
 import { computeNextRun } from '@/lib/scheduler';
 import { resolveScraperSelectors } from '@/lib/scraper-selectors';
+import { requireAdminApi } from '@/lib/auth-guard';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
   const schedule = await getScheduleById(params.id);
 
   if (!schedule) {
@@ -20,6 +24,9 @@ export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
   try {
     const body = await request.json();
     const updates: any = {};
@@ -68,6 +75,9 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
   const success = await deleteSchedule(params.id);
 
   if (!success) {

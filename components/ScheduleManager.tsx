@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { ScrapeSchedule, ScrapeRunLog } from '@/lib/types';
-import { Play, Pause, Trash2, Plus, Clock, CheckCircle, XCircle, Loader2, Calendar } from 'lucide-react';
+import { ScrapeSchedule } from '@/lib/types';
+import { Play, Pause, Trash2, Plus, Clock, CheckCircle, Loader2, Calendar } from 'lucide-react';
 
 const CRON_PRESETS = [
   { label: 'Every hour', value: '0 * * * *' },
@@ -14,7 +14,6 @@ const CRON_PRESETS = [
 
 export function ScheduleManager() {
   const [schedules, setSchedules] = useState<ScrapeSchedule[]>([]);
-  const [logs, setLogs] = useState<ScrapeRunLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [running, setRunning] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -36,17 +35,6 @@ export function ScheduleManager() {
       setSchedules(data.schedules || []);
     } catch (err) {
       console.error('Failed to fetch schedules:', err);
-    }
-  }, []);
-
-  const fetchLogs = useCallback(async () => {
-    try {
-      const res = await fetch('/api/schedule?logs=1');
-      // Logs are fetched from a separate endpoint conceptually,
-      // but for simplicity we'll fetch them inline after runs.
-      // For now, we'll just keep the latest logs per schedule.
-    } catch (err) {
-      console.error('Failed to fetch logs:', err);
     }
   }, []);
 

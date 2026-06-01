@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { runDueSchedules, executeSchedule } from '@/lib/scheduler';
 import { getScheduleById } from '@/lib/supabase';
+import { requireAdminApi } from '@/lib/auth-guard';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -59,6 +60,9 @@ export async function GET(request: Request) {
  * Supports manual runs from the UI without exposing CRON_SECRET in the browser.
  */
 export async function POST(request: Request) {
+  const unauthorized = await requireAdminApi();
+  if (unauthorized) return unauthorized;
+
   try {
     return await handleCronRun(request);
   } catch (error: any) {
