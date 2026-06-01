@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { ScraperControl } from '@/components/ScraperControl';
 import { ScheduleManager } from '@/components/ScheduleManager';
+import { AdminProductManager } from '@/components/AdminProductManager';
 import { isAllowedAdminEmail } from '@/lib/admin-access';
 
 export default async function AdminPage() {
@@ -27,6 +28,10 @@ export default async function AdminPage() {
         <div className="xl:col-span-2">
           <ScheduleManager />
         </div>
+      </div>
+
+      <div className="mt-8">
+        <AdminProductManager />
       </div>
     </div>
   );

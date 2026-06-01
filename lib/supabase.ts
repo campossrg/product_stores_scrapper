@@ -157,6 +157,20 @@ export async function deleteSchedule(id: string): Promise<boolean> {
   return true;
 }
 
+export async function deleteProduct(id: string): Promise<boolean> {
+  const { error } = await supabaseAdmin
+    .from('products')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error deleting product:', error);
+    return false;
+  }
+
+  return true;
+}
+
 export async function getRunLogs(scheduleId?: string, limit: number = 20): Promise<ScrapeRunLog[]> {
   let query = supabaseAdmin
     .from('run_logs')

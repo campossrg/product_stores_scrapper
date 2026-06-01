@@ -1,5 +1,19 @@
 import '@testing-library/jest-dom'
 
+jest.mock('@/auth', () => ({
+  auth: jest.fn().mockResolvedValue({
+    user: { email: 'admin@example.com' },
+  }),
+  signIn: jest.fn(),
+  signOut: jest.fn(),
+  handlers: {
+    GET: jest.fn(),
+    POST: jest.fn(),
+  },
+}))
+
+process.env.ADMIN_EMAILS = 'admin@example.com'
+
 // Mock fetch globally for API tests
 global.fetch = jest.fn()
 
