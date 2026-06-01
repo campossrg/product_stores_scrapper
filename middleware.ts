@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { isAllowedAdminEmail } from '@/lib/admin-access';
+import { isAllowedAdminEmail, isLocalAuthBypassEnabled } from '@/lib/admin-access';
 
-export default auth((request) => {
+const authMiddleware = auth((request) => {
   const isAdmin = isAllowedAdminEmail(request.auth?.user?.email);
 
   if (request.nextUrl.pathname.startsWith('/admin') && !isAdmin) {
@@ -13,6 +13,14 @@ export default auth((request) => {
 
   return NextResponse.next();
 });
+
+export default function middleware(request: Request, context: any) {
+  if (isLocalAuthBypassEnabled()) {
+    return NextResponse.next();
+  }
+
+  return authMiddleware(request as any, context);
+}
 
 export const config = {
   matcher: ['/admin/:path*'],

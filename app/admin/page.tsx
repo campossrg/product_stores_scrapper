@@ -3,10 +3,10 @@ import { auth } from '@/auth';
 import { ScraperControl } from '@/components/ScraperControl';
 import { ScheduleManager } from '@/components/ScheduleManager';
 import { AdminProductManager } from '@/components/AdminProductManager';
-import { isAllowedAdminEmail } from '@/lib/admin-access';
+import { isAllowedAdminEmail, isLocalAuthBypassEnabled } from '@/lib/admin-access';
 
 export default async function AdminPage() {
-  const session = await auth();
+  const session = isLocalAuthBypassEnabled() ? null : await auth();
 
   if (!isAllowedAdminEmail(session?.user?.email)) {
     redirect('/login?callbackUrl=/admin');
@@ -23,7 +23,7 @@ export default async function AdminPage() {
 
       <div className="grid grid-cols-1 gap-8 xl:grid-cols-3">
         <div className="xl:col-span-1">
-          <ScraperControl onScrapeComplete={() => undefined} />
+          <ScraperControl />
         </div>
         <div className="xl:col-span-2">
           <ScheduleManager />

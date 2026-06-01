@@ -68,6 +68,14 @@ ADMIN_EMAILS=you@example.com,teammate@example.com
 
 Only emails listed in `ADMIN_EMAILS` can sign in to `/admin` and use the scrape/schedule APIs.
 
+For local-only testing without Google sign-in, you can temporarily enable:
+
+```
+LOCAL_AUTH_BYPASS=true
+```
+
+This bypasses admin authentication for local development so `/admin` and admin APIs can be tested without signing in. Do not enable it in production.
+
 ### 4. Run Development Server
 
 ```bash
@@ -79,7 +87,7 @@ Open [http://localhost:3000](http://localhost:3000)
 ## Usage
 
 ### Demo Scrape
-Sign in at `/admin` with an allowlisted Google account, then click **"Run Demo Scrape"** to populate the database with sample vegetable data and see the dashboard in action.
+Sign in at `/admin` with an allowlisted Google account, or enable `LOCAL_AUTH_BYPASS=true` for local testing, then click **"Run Demo Scrape"** to populate the database with sample vegetable data and see the dashboard in action.
 
 ### Custom Website Scraping
 After signing in at `/admin`, click **"Custom Website"** to configure scraper settings:

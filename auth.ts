@@ -1,20 +1,29 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
-import { isAllowedAdminEmail } from '@/lib/admin-access';
+import { isAllowedAdminEmail, isLocalAuthBypassEnabled } from '@/lib/admin-access';
+
+const providers =
+  process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
+    ? [
+        Google({
+          clientId: process.env.AUTH_GOOGLE_ID,
+          clientSecret: process.env.AUTH_GOOGLE_SECRET,
+        }),
+      ]
+    : [];
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-    }),
-  ],
+  providers,
   pages: {
     signIn: '/login',
     error: '/login',
   },
   callbacks: {
     async signIn({ user }) {
+      if (isLocalAuthBypassEnabled()) {
+        return true;
+      }
+
       return isAllowedAdminEmail(user.email);
     },
     async session({ session }) {

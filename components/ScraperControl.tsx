@@ -3,11 +3,7 @@
 import { useState } from 'react';
 import { RefreshCw, Play, Settings2 } from 'lucide-react';
 
-interface ScraperControlProps {
-  onScrapeComplete: () => void;
-}
-
-export function ScraperControl({ onScrapeComplete }: ScraperControlProps) {
+export function ScraperControl() {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfig, setShowConfig] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -63,10 +59,6 @@ export function ScraperControl({ onScrapeComplete }: ScraperControlProps) {
 
       const data = await response.json();
       setResult(data);
-      
-      if (data.success) {
-        onScrapeComplete();
-      }
     } catch (error) {
       setResult({ error: 'Failed to scrape. Check console for details.' });
     } finally {
