@@ -74,7 +74,7 @@ For local-only testing without Google sign-in, you can temporarily enable:
 LOCAL_AUTH_BYPASS=true
 ```
 
-This bypasses admin authentication for local development so `/admin` and admin APIs can be tested without signing in. Do not enable it in production.
+This bypasses admin authentication for local development so `/admin` and admin APIs can be tested without signing in. The bypass is hard-disabled in production and on Vercel deployments even if the env var is set.
 
 ### 4. Run Development Server
 
